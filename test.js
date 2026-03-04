@@ -3,6 +3,8 @@ const createElements =(arr)=>{
    console.log(htmlElements.join(" "));
 }
 
+
+
 const synonyms=["hello", "hi", "greetings"];
 
 createElements(synonyms);
