@@ -1,7 +1,17 @@
-const createElements =(arr)=>{
-   const htmlElements = arr.map(el => `<span class="btn">${el}</span>`);
-   return(htmlElements.join(" "));
-}
+const createElements = (arr) => {
+  const htmlElements = arr.map((el) => `<span class="btn">${el}</span>`);
+  return htmlElements.join(" ");
+};
+
+const manageSpinner = (status) => {
+  if (status == true) {
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("word-container").classList.add("hidden");
+  } else {
+    document.getElementById("spinner").classList.add("hidden");
+    document.getElementById("word-container").classList.remove("hidden");
+  }
+};
 
 const loadLessons = () => {
   fetch("https://openapi.programming-hero.com/api/levels/all")
@@ -11,10 +21,11 @@ const loadLessons = () => {
 
 const removeActive = () => {
   const lessonButtons = document.querySelectorAll(".lesson-btn");
-  lessonButtons.forEach(btn=> btn.classList.remove("active"));
-}
+  lessonButtons.forEach((btn) => btn.classList.remove("active"));
+};
 
 const loadLevelWord = (id) => {
+  manageSpinner(true);
   const url = `https://openapi.programming-hero.com/api/level/${id}`;
   fetch(url)
     .then((res) => res.json())
@@ -26,17 +37,13 @@ const loadLevelWord = (id) => {
     });
 };
 
-
-
-
-
-const loadWordDetail = async (id)=>{
+const loadWordDetail = async (id) => {
   const url = `https://openapi.programming-hero.com/api/word/${id}`;
   const res = await fetch(url);
   const details = await res.json();
   displayWordDetails(details.data);
-}
-const displayWordDetails = (word)=>{
+};
+const displayWordDetails = (word) => {
   const detailsBox = document.getElementById("details-container");
   detailsBox.innerHTML = `
           <div class="">
@@ -56,7 +63,7 @@ const displayWordDetails = (word)=>{
         </div>
   `;
   document.getElementById("word_modal").showModal();
-}
+};
 
 const displayLevelWord = (words) => {
   const wordContainer = document.getElementById("word-container");
@@ -70,6 +77,7 @@ const displayLevelWord = (words) => {
         <h2 class="text-4xl font-medium font-bangla">নেক্সট Lesson এ যান</h2>
       </div>
       `;
+    manageSpinner(false);
     return;
   }
 
@@ -97,6 +105,7 @@ const displayLevelWord = (words) => {
       `;
     wordContainer.append(card);
   });
+  manageSpinner(false);
 };
 
 const displayLessons = (lessons) => {
